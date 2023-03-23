@@ -66,7 +66,7 @@
             margin: 20px auto 20px auto;
             padding: 20px 20px 20px 20px;
             box-shadow: 0px 0px 3px 0px gray;
-            
+
 
         }
 
@@ -105,12 +105,74 @@
             margin: 0px 10px 0px 10px;
         }
     </style>
+    <script>
+        //$(document).ready(function () {
+        setInterval(function () {
+            // console.log('갱신')
+            fetch("http://spartacodingclub.shop/sparta_api/weather/seoul").then(res => res.json()).then(data => {
+                let temp = data['temp']
+                $('#weather').empty()
+                $('#weather').append(`${temp}˚C`)
+
+                let now = new Date()
+                $('#timenow').text(`${now.getHours()}시 ${now.getMinutes()}분 ${now.getSeconds()}초`)
+            })
+        }, 1000);  //1000은 갱신되는 시간으로, 1초 = 1000
+
+        function submit_boulder() {
+            alert('준비중임 ㅋ')
+        }
+
+
+        //내 채널ID : UCqnLcS4GU56jiaxXpHjK8Kw
+        //무호K 채널ID : 
+        fetch("https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&channelId=UCqnLcS4GU56jiaxXpHjK8Kw&type=video&key=AIzaSyCqiTD9cHZpp3HYU8JcMvtI4pD6svd-SVA").then(res => res.json()).then(vids_data => {
+            let vids_list = vids_data['items']
+            vids_list.forEach((elem) => {
+                let vid_title = elem['snippet']['title']
+                let vid_id = elem['id']['videoId']
+                let temp_html = `        <div class="col">
+                <div class="card h-100">
+                    <div class="video-container">
+                        <iframe width="280" height="500" src="https://www.youtube.com/embed/${vid_id}" frameborder="0"
+                            allowfullscreen></iframe>
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title">${vid_title}</h5>
+                        <p class="card-text">가져온동영상(코멘트없음)</p>
+                        <div class="boulder-grade">
+                            Grade
+                            <div>(가져온동영상)</div>
+                        </div>
+                        <p>만족도 ⭐⭐⭐(가져온동영상)</p>
+                    </div>
+                </div>
+            </div>`
+
+                // console.log(temp_html)
+
+
+                $('#cards').append(temp_html)
+
+
+            })
+
+
+        })
+
+        //})
+
+    </script>
 </head>
 
 <body>
     <div class="mytitle">
         <h1>나의 클라이밍 기록</h1>
-        <button>볼더 기록하기</button>
+        <div> 현재 서울 날씨: <span id="weather"></span></div>
+        <div> 현재 한국 시간: <span id="timenow"></span></div>
+        <button onclick="submit_boulder()">볼더 기록하기</button>
+
     </div>
 
     <div class="mypost">
@@ -151,7 +213,7 @@
     </div>
 
     <div class='mycards'>
-        <div class="row row-cols-1 row-cols-md-4 g-4">
+        <div id="cards" class="row row-cols-1 row-cols-md-4 g-4">
             <div class="col">
                 <div class="card h-100">
                     <div class="video-container">
